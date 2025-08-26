@@ -1,0 +1,108 @@
+// Utility background color fade
+const FadeBg: React.FC<{colors: string[]}> = ({colors}) => {
+  const frame = useCurrentFrame();
+  const {durationInFrames} = useVideoConfig();
+  const colorIndex = Math.floor((frame / durationInFrames) * colors.length);
+  return <AbsoluteFill style={{backgroundColor: colors[colorIndex]}}/>;
+};
+
+// Character: Ari (simplified silhouette)
+const Ari: React.FC<{x:number, y:number, scale?:number}> = ({x,y,scale=1}) => {
+  return (
+    <div style={{
+      position:'absolute',
+      left:x,
+      top:y,
+      transform:`scale(${scale})`,
+    }}>
+      <svg width={80} height={120} viewBox="0 0 80 120">
+        <circle cx="40" cy="20" r="18" fill="#222"/>
+        <rect x="28" y="38" width="24" height="50" rx="6" fill="#333"/>
+        <rect x="28" y="88" width="8" height="28" fill="#333"/>
+        <rect x="44" y="88" width="8" height="28" fill="#333"/>
+      </svg>
+    </div>
+  );
+};
+
+// Scene component wrappers
+const Scene1 = () => {
+  return (
+    <AbsoluteFill>
+      <FadeBg colors={["#555","#444","#666"]}/>
+      <div style={{color:'#eee', position:'absolute', bottom:40, width:'100%', textAlign:'center'}}>
+        <h2>Puing dan Kesunyian</h2>
+      </div>
+      <Ari x={340} y={200} />
+    </AbsoluteFill>
+  );
+};
+
+const Scene2 = () => {
+  return (
+    <AbsoluteFill style={{backgroundColor:'#444'}}>
+      <div style={{position:'absolute', left:200, top:180, color:'#fff'}}>
+        <h3>Harapan di Tengah Kehancuran</h3>
+      </div>
+      <Ari x={360} y={220}/>
+      <div style={{position:'absolute', left:420, top:250, width:60, height:20, background:'#aaa'}}></div>
+    </AbsoluteFill>
+  );
+};
+
+const Scene3 = () => {
+  return (
+    <AbsoluteFill style={{backgroundColor:'#333'}}>
+      <Ari x={340} y={200}/>
+      <div style={{position:'absolute', left:420, top:230, width:30, height:15, background:'#c9a25f'}}></div>
+      <div style={{position:'absolute', left:460, top:250, width:40, height:30, background:'#555'}}>Bayi</div>
+    </AbsoluteFill>
+  );
+};
+
+const Scene4 = () => {
+  return (
+    <AbsoluteFill style={{backgroundColor:'#222'}}>
+      <Ari x={340} y={200}/>
+      <div style={{position:'absolute', left:420, top:250, width:40, height:30, background:'#666'}}>Bayi</div>
+      <div style={{position:'absolute', left:400, top:240, width:30, height:15, background:'#deb887'}}></div>
+      <div style={{position:'absolute', left:430, top:240, width:30, height:15, background:'#deb887'}}></div>
+    </AbsoluteFill>
+  );
+};
+
+const Scene5 = () => {
+  return (
+    <AbsoluteFill style={{backgroundColor:'#111'}}>
+      <Ari x={320} y={200}/>
+      <div style={{position:'absolute', left:400, top:240, width:40, height:30, background:'#666'}}>Bayi</div>
+      <div style={{position:'absolute', left:500, top:200, width:50, height:100, background:'#224'}}>Tentara</div>
+      <div style={{color:'#fff', position:'absolute', bottom:40, width:'100%', textAlign:'center'}}>
+        <h2>Bahkan dalam kehancuran, kemanusiaan tetap bisa tumbuh.</h2>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+export const VideoAnimasiAri: React.FC = () => {
+  const {fps} = useVideoConfig();
+  return (
+    <AbsoluteFill>
+      <Sequence from={0} durationInFrames={fps*3}>
+        <Scene1/>
+      </Sequence>
+      <Sequence from={fps*3} durationInFrames={fps*3}>
+        <Scene2/>
+      </Sequence>
+      <Sequence from={fps*6} durationInFrames={fps*3}>
+        <Scene3/>
+      </Sequence>
+      <Sequence from={fps*9} durationInFrames={fps*3}>
+        <Scene4/>
+      </Sequence>
+      <Sequence from={fps*12} durationInFrames={fps*3}>
+        <Scene5/>
+      </Sequence>
+    </AbsoluteFill>
+  );
+};
